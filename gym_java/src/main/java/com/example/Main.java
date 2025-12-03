@@ -25,7 +25,7 @@ public class Main {
         frame.add(lblJudul);
 
         // 3. Tombol-tombol Navigasi
-        
+
         // Tombol ke Form 1: Registrasi Member
         JButton btnMember = new JButton("1. Registrasi Member");
         btnMember.setBounds(75, 80, 250, 40);
@@ -47,13 +47,13 @@ public class Main {
         frame.add(btnDaftar);
 
         // 4. Logika Action Listener (Menghubungkan ke file lain)
-        
+
         // Klik Tombol Member -> Buka File RegistrasiMember.java
         btnMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Memanggil method main() milik kelas lain
-                // RegistrasiMember.main(null); 
+                // RegistrasiMember.main(null);
             }
         });
 
@@ -61,7 +61,7 @@ public class Main {
         btnInstruktur.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // InstrukturGym.main(null);
+                new FormInstrukturGym().setVisible(true); // membuka form
             }
         });
 

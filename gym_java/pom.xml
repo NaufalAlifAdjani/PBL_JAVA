@@ -13,4 +13,13 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <!-- utk postgre -->
+    <dependencies>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.2</version>
+        </dependency>
+    </dependencies>
+
 </project>
