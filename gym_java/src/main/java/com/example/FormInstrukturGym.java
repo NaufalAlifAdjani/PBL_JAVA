@@ -44,7 +44,7 @@ public class FormInstrukturGym extends JFrame {
     public FormInstrukturGym() {
         // setup frame utk form instruktur
         setTitle("Form data instruktur gym");
-        setSize(800, 500);
+        setSize(850, 500);
         setLayout(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // menutup form
 
