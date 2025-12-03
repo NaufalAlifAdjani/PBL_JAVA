@@ -1,7 +1,7 @@
 package com.example;
 
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent; // untuk JTable
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -29,7 +29,7 @@ public class FormInstrukturGym extends JFrame {
     // config db
     private final String DB_URL = "jdbc:postgresql://localhost:5432/gym_db";
     private final String DB_USER = "postgres";
-    private final String DB_PASS = "secret";
+    private final String DB_PASS = "awsome";
     private Connection conn;
 
     private void koneksiDB() {
@@ -107,9 +107,11 @@ public class FormInstrukturGym extends JFrame {
             return;
 
         try {
-            String sql = "INSERT INTO instruktur_gym (nama_instruktur, usia, keahlian, nomor_telepon) VALUES (?, ?, ?, ?)";
+            String sql =
+                    "INSERT INTO instruktur_gym (nama_instruktur, usia, keahlian, nomor_telepon) VALUES (?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
 
+            // set nilai dari form
             ps.setString(1, txtNama.getText());
             ps.setInt(2, Integer.parseInt(txtUsia.getText()));
             ps.setString(3, txtKeahlian.getText());
@@ -126,15 +128,17 @@ public class FormInstrukturGym extends JFrame {
 
     // edit
     private void updateData() {
-        if (txtId.getText().isEmpty()) {
+        if (txtId.getText().isEmpty()) { // memastikan user memilih data
             JOptionPane.showMessageDialog(this, "Pilih data dari tabel dulu");
             return;
         }
+
         if (!cekInputValid())
             return;
 
         try {
-            String sql = "UPDATE instruktur_gym SET nama_instruktur=?, usia=?, keahlian=?, nomor_telepon=? WHERE id_instruktur=?";
+            String sql =
+                    "UPDATE instruktur_gym SET nama_instruktur=?, usia=?, keahlian=?, nomor_telepon=? WHERE id_instruktur=?";
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setString(1, txtNama.getText());
@@ -180,7 +184,7 @@ public class FormInstrukturGym extends JFrame {
     // read data
     private void tampilkanData() {
         tableModel.setRowCount(0);
-        try {
+        try { // ambil data dari database
             Statement stmt = conn.createStatement();
             ResultSet rs =
                     stmt.executeQuery("SELECT * FROM instruktur_gym ORDER BY id_instruktur ASC");
@@ -191,7 +195,7 @@ public class FormInstrukturGym extends JFrame {
                         rs.getString("keahlian"), rs.getString("nomor_telepon")});
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Gagal Load Data: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal menampilkan data: " + e.getMessage());
         }
     }
 
@@ -207,8 +211,8 @@ public class FormInstrukturGym extends JFrame {
 
     // validasi input
     private boolean cekInputValid() {
-        if (txtNama.getText().isEmpty() || txtUsia.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nama dan usia wajib diisi!");
+        if (txtNama.getText().isEmpty() || txtUsia.getText().isEmpty() || txtKeahlian.getText().isEmpty() || txtTelp.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Input tidak boleh kosong!");
             return false;
         }
         try {

@@ -27,14 +27,14 @@ public class FormJadwalGym extends JFrame {
     private JTable tabelJadwal;
     private DefaultTableModel model;
     private JButton btnSimpan, btnUbah, btnHapus, btnClear, btnRefresh, btnKembali;
-    
+
     // Variabel bantu
-    private String idSelected = ""; 
+    private String idSelected = "";
 
     // Konfigurasi DB
     private final String DB_URL = "jdbc:postgresql://localhost:5432/gym_db";
     private final String DB_USER = "postgres";
-    private final String DB_PASS = "secret"; // Sesuaikan passwordmu
+    private final String DB_PASS = "awsome"; // Sesuaikan passwordmu
     private Connection conn;
 
     public FormJadwalGym() {
@@ -48,7 +48,7 @@ public class FormJadwalGym extends JFrame {
         koneksiDB();
         buatUI();
         loadInstrukturKeDropdown(); // Isi dropdown instruktur
-        loadDataJadwal();           // Isi tabel
+        loadDataJadwal(); // Isi tabel
     }
 
     private void koneksiDB() {
@@ -109,28 +109,28 @@ public class FormJadwalGym extends JFrame {
 
         // --- TOMBOL ---
         btnSimpan = new JButton("Simpan");
-        btnSimpan.setBounds(20, 190, 80, 30);
+        btnSimpan.setBounds(20, 190, 90, 30);
         add(btnSimpan);
 
         btnUbah = new JButton("Ubah");
-        btnUbah.setBounds(110, 190, 80, 30);
+        btnUbah.setBounds(130, 190, 90, 30);
         add(btnUbah);
 
         btnHapus = new JButton("Hapus");
-        btnHapus.setBounds(200, 190, 80, 30);
+        btnHapus.setBounds(240, 190, 90, 30);
         add(btnHapus);
 
-        btnClear = new JButton("Clear");
-        btnClear.setBounds(290, 190, 80, 30);
+        btnClear = new JButton("Reset");
+        btnClear.setBounds(350, 190, 90, 30);
         add(btnClear);
 
         btnRefresh = new JButton("Refresh");
-        btnRefresh.setBounds(380, 190, 100, 30);
+        btnRefresh.setBounds(460, 190, 90, 30);
         add(btnRefresh);
 
         // Tombol Kembali (Penting agar user bisa balik ke menu)
         btnKembali = new JButton("Kembali");
-        btnKembali.setBounds(500, 190, 100, 30);
+        btnKembali.setBounds(570, 190, 90, 30);
         add(btnKembali);
 
         // --- TABEL ---
@@ -155,7 +155,7 @@ public class FormJadwalGym extends JFrame {
         btnUbah.addActionListener(e -> aksiUbah());
         btnHapus.addActionListener(e -> aksiHapus());
         btnClear.addActionListener(e -> clearForm());
-        
+
         btnRefresh.addActionListener(e -> {
             loadInstrukturKeDropdown();
             loadDataJadwal();
@@ -173,9 +173,9 @@ public class FormJadwalGym extends JFrame {
                     idSelected = model.getValueAt(row, 0).toString();
                     txtNamaKelas.setText(model.getValueAt(row, 1).toString());
                     cbHari.setSelectedItem(model.getValueAt(row, 2).toString());
-                    cbJamMulai.setSelectedItem(model.getValueAt(row, 3).toString()); 
+                    cbJamMulai.setSelectedItem(model.getValueAt(row, 3).toString());
                     cbJamSelesai.setSelectedItem(model.getValueAt(row, 4).toString());
-                    
+
                     String namaInstrukturTabel = model.getValueAt(row, 5).toString();
                     pilihInstrukturDiCombo(namaInstrukturTabel);
                 }
@@ -190,8 +190,9 @@ public class FormJadwalGym extends JFrame {
         cbInstruktur.addItem("-- Pilih Instruktur --");
         try {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id_instruktur, nama_instruktur, keahlian FROM instruktur_gym");
-            
+            ResultSet rs = stmt.executeQuery(
+                    "SELECT id_instruktur, nama_instruktur, keahlian FROM instruktur_gym");
+
             while (rs.next()) {
                 String id = rs.getString("id_instruktur");
                 String nama = rs.getString("nama_instruktur");
@@ -207,26 +208,20 @@ public class FormJadwalGym extends JFrame {
     private void loadDataJadwal() {
         model.setRowCount(0);
         try {
-            String sql = "SELECT j.id_kelas, j.nama_kelas, j.hari, " +
-                         "TO_CHAR(j.jam_mulai, 'HH24:MI') as jam_mulai, " +
-                         "TO_CHAR(j.jam_selesai, 'HH24:MI') as jam_selesai, " +
-                         "i.nama_instruktur " +
-                         "FROM jadwal_kelas j " +
-                         "JOIN instruktur_gym i ON j.id_instruktur = i.id_instruktur " +
-                         "ORDER BY j.hari, j.jam_mulai ASC";
-            
+            String sql = "SELECT j.id_kelas, j.nama_kelas, j.hari, "
+                    + "TO_CHAR(j.jam_kelas, 'HH24:MI') as jam_kelas, "
+                    + "TO_CHAR(j.jam_selesai, 'HH24:MI') as jam_selesai, " + "i.nama_instruktur "
+                    + "FROM jadwal_kelas j "
+                    + "JOIN instruktur_gym i ON j.id_instruktur = i.id_instruktur "
+                    + "ORDER BY j.hari, j.jam_kelas ASC";
+
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getString("id_kelas"),
-                    rs.getString("nama_kelas"),
-                    rs.getString("hari"),
-                    rs.getString("jam_mulai"),
-                    rs.getString("jam_selesai"),
-                    rs.getString("nama_instruktur")
-                });
+                model.addRow(new Object[] {rs.getString("id_kelas"), rs.getString("nama_kelas"),
+                        rs.getString("hari"), rs.getString("jam_kelas"),
+                        rs.getString("jam_selesai"), rs.getString("nama_instruktur")});
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal Load Data: " + e.getMessage());
@@ -234,6 +229,10 @@ public class FormJadwalGym extends JFrame {
     }
 
     private void aksiSimpan() {
+        if (!cekInputValid()) { // cek validasi
+            return; // stop jika tidak valid
+        }
+
         int idIns = getSelectedInstrukturID();
         if (idIns == -1) {
             JOptionPane.showMessageDialog(this, "Pilih Instruktur dulu!");
@@ -241,9 +240,9 @@ public class FormJadwalGym extends JFrame {
         }
 
         try {
-            String sql = "INSERT INTO jadwal_kelas (nama_kelas, hari, jam_mulai, jam_selesai, id_instruktur) VALUES (?, ?, ?::time, ?::time, ?)";
+            String sql = "INSERT INTO jadwal_kelas (nama_kelas, hari, jam_kelas, jam_selesai, id_instruktur) VALUES (?, ?, ?::time, ?::time, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            
+
             pstmt.setString(1, txtNamaKelas.getText());
             pstmt.setString(2, cbHari.getSelectedItem().toString());
             pstmt.setString(3, cbJamMulai.getSelectedItem().toString());
@@ -260,16 +259,16 @@ public class FormJadwalGym extends JFrame {
     }
 
     private void aksiUbah() {
-        if(idSelected.isEmpty()) {
+        if (idSelected.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Pilih data tabel dulu!");
             return;
         }
         int idIns = getSelectedInstrukturID();
 
         try {
-            String sql = "UPDATE jadwal_kelas SET nama_kelas=?, hari=?, jam_mulai=?::time, jam_selesai=?::time, id_instruktur=? WHERE id_kelas=?";
+            String sql = "UPDATE jadwal_kelas SET nama_kelas=?, hari=?, jam_kelas=?::time, jam_selesai=?::time, id_instruktur=? WHERE id_kelas=?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            
+
             pstmt.setString(1, txtNamaKelas.getText());
             pstmt.setString(2, cbHari.getSelectedItem().toString());
             pstmt.setString(3, cbJamMulai.getSelectedItem().toString());
@@ -287,7 +286,7 @@ public class FormJadwalGym extends JFrame {
     }
 
     private void aksiHapus() {
-        if(idSelected.isEmpty()) {
+        if (idSelected.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus!");
             return;
         }
@@ -319,20 +318,22 @@ public class FormJadwalGym extends JFrame {
     // --- HELPER METHODS ---
 
     private String[] generateJam() {
-        String[] jam = new String[33]; 
+        String[] jam = new String[33];
         int index = 0;
         for (int h = 6; h <= 22; h++) {
             jam[index++] = String.format("%02d:00", h);
-            if(h != 22) jam[index++] = String.format("%02d:30", h);
+            if (h != 22)
+                jam[index++] = String.format("%02d:30", h);
         }
         return jam;
     }
 
     private int getSelectedInstrukturID() {
-        if (cbInstruktur.getSelectedIndex() <= 0) return -1;
+        if (cbInstruktur.getSelectedIndex() <= 0)
+            return -1;
         String selected = cbInstruktur.getSelectedItem().toString();
-        String[] parts = selected.split(" - "); 
-        return Integer.parseInt(parts[0]); 
+        String[] parts = selected.split(" - ");
+        return Integer.parseInt(parts[0]);
     }
 
     private void pilihInstrukturDiCombo(String namaInstruktur) {
@@ -343,6 +344,32 @@ public class FormJadwalGym extends JFrame {
                 break;
             }
         }
+    }
+
+    // validasi input
+    private boolean cekInputValid() {
+        if (txtNamaKelas.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama kelas wajib diisi!", "Validasi Error", JOptionPane.WARNING_MESSAGE);
+            txtNamaKelas.requestFocus();
+            return false; // jika kosong akan dihentikan prosesnya
+        }
+
+        if (cbInstruktur.getSelectedIndex() <= 0) {
+            JOptionPane.showMessageDialog(this, "Harap pilih instruktur!", "Validasi error", JOptionPane.WARNING_MESSAGE);
+            cbInstruktur.requestFocus();
+            return false;
+        }
+
+        String jamMulai = cbJamMulai.getSelectedItem().toString();
+        String jamSelesai = cbJamSelesai.getSelectedItem().toString();
+
+        if (jamMulai.compareTo(jamSelesai) >= 0) {
+            JOptionPane.showMessageDialog(this, "Jam selesai tidak boleh sama atau lebih awal dari jam mulai", "Validasi error",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
 
     // Main method agar bisa ditest langsung (Run File)

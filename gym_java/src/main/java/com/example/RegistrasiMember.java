@@ -1,4 +1,4 @@
-package com.example; 
+package com.example;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -33,17 +33,17 @@ public class RegistrasiMember extends JFrame {
 
     // --- KONFIGURASI POSTGRESQL ---
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/gym_db";
-    private static final String DB_USER = "postgres"; 
+    private static final String DB_USER = "postgres";
     // Sesuaikan password database kamu di sini (misal: "awsome" atau "secret")
-    private static final String DB_PASS = "secret"; 
+    private static final String DB_PASS = "awsome";
 
     public RegistrasiMember() {
         setTitle("Form Registrasi Member Gym");
         setSize(850, 500);
-        
+
         // PENTING: Gunakan DISPOSE agar aplikasi utama tidak ikut tertutup
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         setLayout(null);
         setLocationRelativeTo(null);
 
@@ -71,11 +71,11 @@ public class RegistrasiMember extends JFrame {
         add(txtNoTelp);
 
         // Tanggal Bergabung
-        JLabel lblTgl = new JLabel("Tgl Gabung (YYYY-MM-DD):");
-        lblTgl.setBounds(20, 100, 180, 25);
+        JLabel lblTgl = new JLabel("Tanggal gabung:");
+        lblTgl.setBounds(20, 100, 170, 25);
         add(lblTgl);
         txtTanggal = new JTextField();
-        txtTanggal.setBounds(180, 100, 170, 25);
+        txtTanggal.setBounds(150, 100, 200, 25);
         txtTanggal.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         add(txtTanggal);
 
@@ -90,20 +90,20 @@ public class RegistrasiMember extends JFrame {
 
         // --- TOMBOL ---
         btnSimpan = new JButton("Simpan");
-        btnSimpan.setBounds(150, 240, 80, 30);
+        btnSimpan.setBounds(90, 240, 80, 30);
         add(btnSimpan);
 
         btnReset = new JButton("Reset");
-        btnReset.setBounds(240, 240, 80, 30);
+        btnReset.setBounds(180, 240, 80, 30);
         add(btnReset);
 
         btnHapus = new JButton("Hapus");
-        btnHapus.setBounds(330, 240, 80, 30);
+        btnHapus.setBounds(270, 240, 80, 30);
         add(btnHapus);
 
         // --- TOMBOL KEMBALI (BARU) ---
         btnKembali = new JButton("Kembali ke Menu Utama");
-        btnKembali.setBounds(150, 280, 260, 30); // Posisi di bawah tombol CRUD
+        btnKembali.setBounds(90, 280, 260, 30); // Posisi di bawah tombol CRUD
         add(btnKembali);
 
         // --- TABEL ---
@@ -116,16 +116,16 @@ public class RegistrasiMember extends JFrame {
         };
         tableMember = new JTable(tableModel);
         JScrollPane scrollTable = new JScrollPane(tableMember);
-        scrollTable.setBounds(420, 20, 400, 400); 
+        scrollTable.setBounds(420, 20, 400, 400);
         add(scrollTable);
 
         // --- EVENT HANDLING ---
         btnSimpan.addActionListener(e -> simpanData());
         btnReset.addActionListener(e -> resetForm());
         btnHapus.addActionListener(e -> hapusData());
-        
+
         // Event Tombol Kembali
-        btnKembali.addActionListener(e -> dispose()); 
+        btnKembali.addActionListener(e -> dispose());
 
         tableMember.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -149,17 +149,13 @@ public class RegistrasiMember extends JFrame {
     private void loadData() {
         tableModel.setRowCount(0);
         try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM members ORDER BY id_member ASC")) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM members ORDER BY id_member ASC")) {
 
             while (rs.next()) {
-                tableModel.addRow(new Object[]{
-                    rs.getInt("id_member"),
-                    rs.getString("nama_member"),
-                    rs.getString("nomor_telepon"),
-                    rs.getString("alamat"),
-                    rs.getDate("tanggal_bergabung")
-                });
+                tableModel.addRow(new Object[] {rs.getInt("id_member"), rs.getString("nama_member"),
+                        rs.getString("nomor_telepon"), rs.getString("alamat"),
+                        rs.getDate("tanggal_bergabung")});
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Gagal Konek ke PostgreSQL: " + e.getMessage());
@@ -173,25 +169,26 @@ public class RegistrasiMember extends JFrame {
         String alamat = txtAlamat.getText();
         String tgl = txtTanggal.getText();
 
-        if (nama.isEmpty() || telp.isEmpty() || tgl.isEmpty()) {
+        // validasi input
+        if (nama.isEmpty() || telp.isEmpty() || tgl.isEmpty() || alamat.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Data tidak boleh kosong!");
             return;
         }
 
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                 "INSERT INTO members (nama_member, nomor_telepon, alamat, tanggal_bergabung) VALUES (?, ?, ?, ?::date)")) {
-            
+                PreparedStatement ps = conn.prepareStatement(
+                        "INSERT INTO members (nama_member, nomor_telepon, alamat, tanggal_bergabung) VALUES (?, ?, ?, ?::date)")) {
+
             ps.setString(1, nama);
             ps.setString(2, telp);
             ps.setString(3, alamat);
-            ps.setString(4, tgl); 
-            
+            ps.setString(4, tgl);
+
             ps.executeUpdate();
             JOptionPane.showMessageDialog(this, "Berhasil Disimpan!");
             loadData();
             resetForm();
-            
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Gagal Simpan: " + e.getMessage());
         }
@@ -205,19 +202,21 @@ public class RegistrasiMember extends JFrame {
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this, "Hapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "Hapus data ini?", "Konfirmasi",
+                JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             int id = (int) tableModel.getValueAt(selectedRow, 0);
 
             try (Connection conn = getConnection();
-                 PreparedStatement ps = conn.prepareStatement("DELETE FROM members WHERE id_member = ?")) {
-                
+                    PreparedStatement ps =
+                            conn.prepareStatement("DELETE FROM members WHERE id_member = ?")) {
+
                 ps.setInt(1, id);
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Berhasil Dihapus!");
                 loadData();
                 resetForm();
-                
+
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Gagal Hapus: " + e.getMessage());
             }

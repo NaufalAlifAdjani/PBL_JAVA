@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
-import java.sql.Date; 
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +31,7 @@ public class RegistrasiKelas extends JFrame {
     // Config DB
     private final String DB_URL = "jdbc:postgresql://localhost:5432/gym_db";
     private final String DB_USER = "postgres";
-    private final String DB_PASS = "secret"; // Sesuaikan password
+    private final String DB_PASS = "awsome"; // Sesuaikan password
     private Connection conn;
 
     public RegistrasiKelas() {
@@ -61,7 +61,7 @@ public class RegistrasiKelas extends JFrame {
         JLabel lblId = new JLabel("ID Pendaftaran:");
         lblId.setBounds(20, 20, 100, 25);
         add(lblId);
-        
+
         txtIdPendaftaran = new JTextField("Auto"); // Default text
         txtIdPendaftaran.setBounds(130, 20, 200, 25);
         txtIdPendaftaran.setEditable(false); // User GABOLEH ngisi ini manual
@@ -85,7 +85,7 @@ public class RegistrasiKelas extends JFrame {
         add(txtIdKelas);
 
         // --- Tanggal ---
-        JLabel lblTgl = new JLabel("Tgl (YYYY-MM-DD):");
+        JLabel lblTgl = new JLabel("Tanggal:");
         lblTgl.setBounds(20, 140, 120, 25);
         add(lblTgl);
         txtTanggal = new JTextField();
@@ -102,19 +102,19 @@ public class RegistrasiKelas extends JFrame {
 
         // --- BUTTONS ---
         btnTambah = new JButton("Tambah");
-        btnTambah.setBounds(20, 230, 80, 30);
+        btnTambah.setBounds(20, 230, 90, 30);
         add(btnTambah);
 
         btnHapus = new JButton("Hapus");
-        btnHapus.setBounds(110, 230, 80, 30);
+        btnHapus.setBounds(130, 230, 90, 30);
         add(btnHapus);
 
         btnReset = new JButton("Reset");
-        btnReset.setBounds(200, 230, 80, 30);
+        btnReset.setBounds(240, 230, 90, 30);
         add(btnReset);
 
         btnKembali = new JButton("Kembali");
-        btnKembali.setBounds(20, 400, 310, 30);
+        btnKembali.setBounds(20, 280, 310, 30);
         add(btnKembali);
 
         // --- TABLE ---
@@ -142,7 +142,9 @@ public class RegistrasiKelas extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 int row = tabelDaftarKelas.getSelectedRow();
                 if (row != -1) {
-                    txtIdPendaftaran.setText(tableModel.getValueAt(row, 0).toString()); // ID diambil dari sini
+                    txtIdPendaftaran.setText(tableModel.getValueAt(row, 0).toString()); // ID
+                                                                                        // diambil
+                                                                                        // dari sini
                     txtIdMember.setText(tableModel.getValueAt(row, 1).toString());
                     txtIdKelas.setText(tableModel.getValueAt(row, 2).toString());
                     txtTanggal.setText(tableModel.getValueAt(row, 3).toString());
@@ -162,13 +164,10 @@ public class RegistrasiKelas extends JFrame {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                tableModel.addRow(new Object[]{
-                    rs.getInt("id_pendaftaran"), // ID tetap kita ambil untuk ditampilkan
-                    rs.getInt("id_member"),
-                    rs.getInt("id_kelas"),
-                    rs.getDate("tanggal_daftar"),
-                    rs.getString("catatan")
-                });
+                tableModel.addRow(new Object[] {rs.getInt("id_pendaftaran"), // ID tetap kita ambil
+                                                                             // untuk ditampilkan
+                        rs.getInt("id_member"), rs.getInt("id_kelas"), rs.getDate("tanggal_daftar"),
+                        rs.getString("catatan")});
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Gagal Load Data: " + e.getMessage());
@@ -176,20 +175,22 @@ public class RegistrasiKelas extends JFrame {
     }
 
     private void simpanData() {
-        if (txtIdMember.getText().isEmpty() || txtIdKelas.getText().isEmpty() || txtTanggal.getText().isEmpty()) {
+        if (txtIdMember.getText().isEmpty() || txtIdKelas.getText().isEmpty()
+                || txtTanggal.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "ID Member, ID Kelas, dan Tanggal harus diisi!");
             return;
         }
 
         try {
             // PERBAIKAN DI SINI: Tidak memasukkan id_pendaftaran (karena auto increment)
-            String sql = "INSERT INTO pendaftaran_kelas (id_member, id_kelas, tanggal_daftar, catatan) VALUES (?, ?, ?, ?)";
+            String sql =
+                    "INSERT INTO pendaftaran_kelas (id_member, id_kelas, tanggal_daftar, catatan) VALUES (?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
 
             // Parsing input (Mulai dari parameter 1 = id_member)
             ps.setInt(1, Integer.parseInt(txtIdMember.getText()));
             ps.setInt(2, Integer.parseInt(txtIdKelas.getText()));
-            ps.setDate(3, Date.valueOf(txtTanggal.getText())); 
+            ps.setDate(3, Date.valueOf(txtTanggal.getText()));
             ps.setString(4, txtCatatan.getText());
 
             ps.executeUpdate();
@@ -213,7 +214,9 @@ public class RegistrasiKelas extends JFrame {
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this, "Yakin hapus data ID " + txtIdPendaftaran.getText() + "?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Yakin hapus data ID " + txtIdPendaftaran.getText() + "?", "Konfirmasi",
+                JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 String sql = "DELETE FROM pendaftaran_kelas WHERE id_pendaftaran = ?";
