@@ -53,7 +53,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Memanggil method main() milik kelas lain
-                // RegistrasiMember.main(null); 
+                new RegistrasiMember().setVisible(true); 
             }
         });
 
@@ -61,7 +61,7 @@ public class Main {
         btnInstruktur.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // InstrukturGym.main(null);
+                new FormInstrukturGym().setVisible(true);
             }
         });
 
@@ -69,7 +69,7 @@ public class Main {
         btnJadwal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // JadwalGym.main(null);
+                new FormJadwalGym().setVisible(true);
             }
         });
 
@@ -77,7 +77,7 @@ public class Main {
         btnDaftar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // RegistrasiKelas.main(null);
+                new RegistrasiKelas().setVisible(true);
             }
         });
 
