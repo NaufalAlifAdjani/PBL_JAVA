@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 public class Main {
@@ -77,7 +79,7 @@ public class Main {
         btnDaftar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // RegistrasiKelas.main(null);
+                 new FormRegistrasiKelas(new RegistrasiKelas());
             }
         });
 
