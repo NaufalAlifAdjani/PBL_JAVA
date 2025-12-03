@@ -5,7 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 
 public class RegistrasiKelas {
-    // Deklarasi atribut
+
     private JTextField idPendaftaran, idMember, idKelas, tanggalDaftar, catatan;
     private JButton tambah, delete, reset;
     private JTable tabelDaftarKelas;
@@ -15,7 +15,7 @@ public class RegistrasiKelas {
     private static final String DB_PASS = "passwordbaru";
 
     public RegistrasiKelas() {
-        // Setup atribut
+
         idPendaftaran = new JTextField();
         idMember = new JTextField();
         idKelas = new JTextField();
@@ -30,7 +30,6 @@ public class RegistrasiKelas {
         delete = new JButton("Hapus");
         reset = new JButton("Reset");
 
-        // Aksi untuk tombol "Tambah"
         tambah.addActionListener(e -> {
             String idPendStr = idPendaftaran.getText();
             String idMemStr  = idMember.getText();
@@ -64,7 +63,6 @@ public class RegistrasiKelas {
         });
     }
 
-    // Method untuk menyimpan data ke database
     public static void saveData(int idPendaftaran, int idMember, int idKelas, java.sql.Date tanggalDaftar, String catatan) {
         String sql = "INSERT INTO pendaftaran_kelas (id_pendaftaran, id_member, id_kelas, tanggal_daftar, catatan) VALUES (?, ?, ?, ?, ?)";
 
@@ -82,7 +80,6 @@ public class RegistrasiKelas {
         }
     }
 
-    // Method untuk menghapus data berdasarkan ID Pendaftaran
     public static void deleteFromDatabase(String idPendaftaran) {
         String sql = "DELETE FROM pendaftaran_kelas WHERE id_pendaftaran = ?";
 
@@ -97,7 +94,6 @@ public class RegistrasiKelas {
         }
     }
 
-    // Getter untuk setiap atribut
     public JTextField getIdPendaftaran() { 
         return idPendaftaran; 
     }
