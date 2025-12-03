@@ -1,13 +1,13 @@
-package com.example; // Sesuai dengan folder di gambar
+package com.example; // Pastikan ini sama dengan folder Anda
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.JOptionPane; // Tambahan untuk pesan error jika file belum ada
 
 public class Main {
     public static void main(String[] args) {
@@ -15,8 +15,8 @@ public class Main {
         JFrame frame = new JFrame("Dashboard Admin - Gym Management");
         frame.setSize(400, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null); // Layout manual agar mudah diatur posisinya
-        frame.setLocationRelativeTo(null); // Agar muncul di tengah layar
+        frame.setLayout(null); 
+        frame.setLocationRelativeTo(null); 
 
         // 2. Judul Menu
         JLabel lblJudul = new JLabel("SISTEM MANAJEMEN GYM", SwingConstants.CENTER);
@@ -25,59 +25,63 @@ public class Main {
         frame.add(lblJudul);
 
         // 3. Tombol-tombol Navigasi
-        
-        // Tombol ke Form 1: Registrasi Member
         JButton btnMember = new JButton("1. Registrasi Member");
         btnMember.setBounds(75, 80, 250, 40);
         frame.add(btnMember);
 
-        // Tombol ke Form 2: Data Instruktur
         JButton btnInstruktur = new JButton("2. Data Instruktur");
         btnInstruktur.setBounds(75, 140, 250, 40);
         frame.add(btnInstruktur);
 
-        // Tombol ke Form 3: Jadwal Kelas
         JButton btnJadwal = new JButton("3. Jadwal Kelas");
         btnJadwal.setBounds(75, 200, 250, 40);
         frame.add(btnJadwal);
 
-        // Tombol ke Form 4: Pendaftaran Kelas
         JButton btnDaftar = new JButton("4. Pendaftaran Kelas Gym");
         btnDaftar.setBounds(75, 260, 250, 40);
         frame.add(btnDaftar);
 
-        // 4. Logika Action Listener (Menghubungkan ke file lain)
+        // 4. Logika Action Listener (SUDAH DIPERBAIKI)
         
-        // Klik Tombol Member -> Buka File RegistrasiMember.java
+        // --- TOMBOL 1: REGISTRASI MEMBER ---
         btnMember.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Memanggil method main() milik kelas lain
-                // RegistrasiMember.main(null); 
+                // KODE LAMA (Salah/Mati):
+                // // RegistrasiMember.main(null); 
+                
+                // KODE BARU (Benar):
+                // Membuka jendela RegistrasiMember
+                new RegistrasiMember().setVisible(true); 
+                
+                // Opsional: frame.dispose(); // Jika ingin menutup menu utama saat form terbuka
             }
         });
 
-        // Klik Tombol Instruktur -> Buka File InstrukturGym.java
+        // --- TOMBOL 2: INSTRUKTUR (Placeholder) ---
         btnInstruktur.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // InstrukturGym.main(null);
+                JOptionPane.showMessageDialog(frame, "Form Instruktur belum dibuat!");
+                // Nanti diganti: new InstrukturGym().setVisible(true);
             }
         });
 
-        // Klik Tombol Jadwal -> Buka File JadwalGym.java
+        // --- TOMBOL 3: JADWAL (Placeholder) ---
         btnJadwal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // JadwalGym.main(null);
+                JOptionPane.showMessageDialog(frame, "Form Jadwal belum dibuat!");
+                // Nanti diganti: new JadwalGym().setVisible(true);
             }
         });
 
-        // Klik Tombol Daftar -> Buka File RegistrasiKelas.java
+        // --- TOMBOL 4: PENDAFTARAN (Placeholder) ---
         btnDaftar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // RegistrasiKelas.main(null);
+                JOptionPane.showMessageDialog(frame, "Form Pendaftaran belum dibuat!");
+                // Nanti diganti: new RegistrasiKelas().setVisible(true);
             }
         });
 
