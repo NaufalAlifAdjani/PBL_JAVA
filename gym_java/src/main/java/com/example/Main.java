@@ -61,7 +61,7 @@ public class Main {
         btnInstruktur.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new FormInstruktur().setVisible(true); // membuka form
+                new FormInstrukturGym().setVisible(true); // membuka form
             }
         });
 

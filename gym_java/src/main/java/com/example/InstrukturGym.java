@@ -1,27 +1,28 @@
 package com.example;
 
 public class InstrukturGym {
-    private int idInstruktur;
-    private String namaInstruktur;
+    private int id_instruktur;
+    private String nama_instruktur;
     private int usia;
     private String keahlian;
-    private String noTelp;
+    private String nomor_telepon;
 
-    public InstrukturGym(int idInstruktur, String namaInstruktur, int usia, String keahlian, String noTelp) {
-        this.idInstruktur = idInstruktur;
-        this.namaInstruktur = namaInstruktur;
+    // konstruktor
+    public InstrukturGym(int id, String nama, int usia, String keahlian, String noTelp) {
+        this.id_instruktur = id;
+        this.nama_instruktur = nama;
         this.usia = usia;
         this.keahlian = keahlian;
-        this.noTelp = noTelp;
+        this.nomor_telepon = noTelp;
     }
 
     // getter
     public int getId() {
-        return idInstruktur;
+        return id_instruktur;
     }
 
     public String getNama() {
-        return namaInstruktur;
+        return nama_instruktur;
     }
 
     public int getUsia() {
@@ -33,6 +34,6 @@ public class InstrukturGym {
     }
 
     public String getNoTelp() {
-        return noTelp;
+        return nomor_telepon;
     }
 }
