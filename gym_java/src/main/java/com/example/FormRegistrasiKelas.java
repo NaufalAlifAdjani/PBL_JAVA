@@ -11,7 +11,6 @@ public class FormRegistrasiKelas {
         frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Label dan Text Fields
         JLabel judul = new JLabel("DAFTAR KELAS GYM");
         judul.setBounds(145, 10, 200, 25);
         frame.add(judul);
@@ -46,7 +45,6 @@ public class FormRegistrasiKelas {
         form.getCatatan().setBounds(115, 180, 200, 25);
         frame.add(form.getCatatan());
 
-        // Tombol
         form.getTambah().setBounds(20, 215, 100, 30);
         frame.add(form.getTambah());
 
@@ -56,15 +54,12 @@ public class FormRegistrasiKelas {
         form.getDelete().setBounds(240, 215, 100, 30);
         frame.add(form.getDelete());
 
-        // Tabel untuk menampilkan data
         JScrollPane scroll = new JScrollPane(form.getTabel());
         scroll.setBounds(20, 250, 400, 130);
         frame.add(scroll);
 
-        // Set frame visible
         frame.setVisible(true);
 
-        // Reset button action
         form.getReset().addActionListener(e -> {
             form.getIdPendaftaran().setText("");
             form.getIdMember().setText("");
@@ -73,7 +68,6 @@ public class FormRegistrasiKelas {
             form.getCatatan().setText("");
         });
 
-        // Delete button action
         form.getDelete().addActionListener(e -> {
             int selectedRow = form.getTabel().getSelectedRow();
             if (selectedRow == -1) {
@@ -84,7 +78,7 @@ public class FormRegistrasiKelas {
             DefaultTableModel model = (DefaultTableModel) form.getTabel().getModel();
             model.removeRow(selectedRow);
 
-            String idPendaftaran = model.getValueAt(selectedRow, 0).toString();  // ID Pendaftaran ada di kolom 0
+            String idPendaftaran = model.getValueAt(selectedRow, 0).toString(); 
             RegistrasiKelas.deleteFromDatabase(idPendaftaran);
         });
     }
